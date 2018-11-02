@@ -4,7 +4,7 @@ services:
   php-apache:
     build:
       context: ./php-apache
-    container_name: php56
+    container_name: php71
     volumes:
       - ./public_html/:/var/www/html/
       - ./php-apache/apache2/apache2.conf:/etc/apache2/apache2.conf
@@ -16,13 +16,11 @@ services:
       - 'mariadb'
   mariadb:
     image: mariadb:10.3
+    container_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql
     environment:
         MYSQL_ALLOW_EMPTY_PASSWORD: "no"
         MYSQL_ROOT_PASSWORD: "1"
-        MYSQL_USER: 'php56'
-        MYSQL_PASSWORD: '1'
-        MYSQL_DATABASE: 'php56'
 volumes:
     mariadb:
