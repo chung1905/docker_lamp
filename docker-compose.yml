@@ -10,6 +10,9 @@ services:
       - ./php-apache/apache2/apache2.conf:/etc/apache2/apache2.conf
     ports:
       - "80:80"
+    networks:
+      static-ip:
+        ipv4_address: 10.5.0.5
     stdin_open: true
     tty: true
     links: 
@@ -24,5 +27,15 @@ services:
         MYSQL_ROOT_PASSWORD: "1"
     ports:
       - 3306:3306
+    networks:
+      static-ip:
+        ipv4_address: 10.5.0.6
+networks:
+  static-ip:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
 volumes:
     mariadb:

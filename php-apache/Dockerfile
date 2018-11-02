@@ -16,6 +16,12 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 
 RUN docker-php-ext-install pdo_mysql mcrypt xsl intl zip bcmath -j$(nproc) gd soap
 
+RUN pecl install xdebug
+
+RUN docker-php-ext-enable xdebug
+
+COPY ./php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
+
 RUN a2enmod rewrite
 
 EXPOSE 80
