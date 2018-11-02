@@ -22,5 +22,7 @@ services:
     environment:
         MYSQL_ALLOW_EMPTY_PASSWORD: "no"
         MYSQL_ROOT_PASSWORD: "1"
+    ports:
+      - 3306:3306
 volumes:
     mariadb:
