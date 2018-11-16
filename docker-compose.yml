@@ -8,20 +8,17 @@ services:
     volumes:
       - ./public_html/:/var/www/html/
       - ./php-apache/apache2/apache2.conf:/etc/apache2/apache2.conf
+      - ./php-apache/apache2/sites-available:/etc/apache2/sites-available
     ports:
       - "80:80"
     networks:
       static-ip:
         ipv4_address: 10.5.0.5
-    stdin_open: true
-    tty: true
     links: 
       - 'mariadb'
   mariadb:
     image: mariadb:10.3
     container_name: mariadb
-    volumes:
-      - mariadb:/var/lib/mysql
     environment:
         MYSQL_ALLOW_EMPTY_PASSWORD: "no"
         MYSQL_ROOT_PASSWORD: "1"
