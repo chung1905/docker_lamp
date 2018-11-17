@@ -24,4 +24,11 @@ COPY ./php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
 
 RUN a2enmod rewrite
 
+ARG USER_NAME
+
+RUN useradd -M -U ${USER_NAME} -u 1000 -p1 -d /var/www/html -s /bin/bash -G root -o
+
+ENV APACHE_RUN_USER ${USER_NAME}
+ENV APACHE_RUN_GROUP ${USER_NAME}
+
 EXPOSE 80

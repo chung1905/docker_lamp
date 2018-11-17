@@ -4,12 +4,15 @@ services:
   php-apache:
     build:
       context: ./php-apache
+      args:
+        USER_NAME: 'chung'
     container_name: php71
     restart: always
     volumes:
       - ./public_html/:/var/www/html/
       - ./php-apache/apache2/apache2.conf:/etc/apache2/apache2.conf
       - ./php-apache/apache2/sites-available:/etc/apache2/sites-available
+      - ./php-apache/apache2/sites-enabled:/etc/apache2/sites-enabled
     ports:
       - "80:80"
     networks:
