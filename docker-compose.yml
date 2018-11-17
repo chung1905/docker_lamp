@@ -5,6 +5,7 @@ services:
     build:
       context: ./php-apache
     container_name: php71
+    restart: always
     volumes:
       - ./public_html/:/var/www/html/
       - ./php-apache/apache2/apache2.conf:/etc/apache2/apache2.conf
@@ -19,6 +20,11 @@ services:
   mariadb:
     image: mariadb:10.3
     container_name: mariadb
+    restart: always
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    expose:
+      - "3306"
     environment:
         MYSQL_ALLOW_EMPTY_PASSWORD: "no"
         MYSQL_ROOT_PASSWORD: "1"
