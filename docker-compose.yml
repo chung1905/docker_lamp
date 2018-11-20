@@ -6,6 +6,7 @@ services:
       context: ./php-apache
       args:
         USER_NAME: 'chung'
+        UID: '1000'
     container_name: php71
     restart: always
     volumes:
