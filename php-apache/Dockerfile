@@ -1,14 +1,14 @@
 FROM php:7.1-apache
 
 RUN apt-get -y update \
-	&& apt-get install -y \
-		libmcrypt-dev \
-		libxslt-dev \
-		zlib1g-dev \
-		libpng-dev \
-		libjpeg-dev \
-		libfreetype6-dev \
-		libjpeg62-turbo-dev \
+    && apt-get install -y \
+        libmcrypt-dev \
+        libxslt-dev \
+        zlib1g-dev \
+        libpng-dev \
+        libjpeg-dev \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) iconv
 
