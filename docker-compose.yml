@@ -14,7 +14,7 @@ services:
       - ./php-apache/apache2/apache2.conf:/etc/apache2/apache2.conf
       - ./php-apache/apache2/sites-available:/etc/apache2/sites-available
       - ./php-apache/apache2/sites-enabled:/etc/apache2/sites-enabled
-      - ./php-apache/php/conf.d/php.ini:/usr/local/etc/php/php.ini-development
+      - ./php-apache/php/conf.d/php.ini:/usr/local/etc/php/conf.d/zz-php.ini
     ports:
       - "80:80"
     networks:
