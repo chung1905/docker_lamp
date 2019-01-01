@@ -13,6 +13,8 @@ services:
       - ./public_html/:/var/www/html/
       - ./php-apache/apache2/apache2.conf:/etc/apache2/apache2.conf
       - ./php-apache/apache2/sites-available:/etc/apache2/sites-available
+      - ./php-apache/ssl/certs:/etc/ssl/certs/apache2
+      - ./php-apache/ssl/private:/etc/ssl/private/apache2
       - ./php-apache/apache2/sites-enabled:/etc/apache2/sites-enabled
       - ./php-apache/php/conf.d/php.ini:/usr/local/etc/php/conf.d/zz-php.ini
     ports:
