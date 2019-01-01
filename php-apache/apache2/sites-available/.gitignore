@@ -1,3 +1,4 @@
 *
 !.gitignore
 !000-default.conf
+!default-ssl.conf

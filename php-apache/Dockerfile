@@ -22,7 +22,7 @@ RUN docker-php-ext-enable xdebug
 
 RUN apt-get install -y cron
 
-COPY ./php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
+COPY ./php/conf.d/xdebug/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
 
 RUN a2enmod rewrite
 
@@ -37,3 +37,4 @@ ENV APACHE_RUN_GROUP ${USER_NAME}
 RUN rm -rf /var/lib/apt/lists/*
 
 EXPOSE 80
+EXPOSE 443

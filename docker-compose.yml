@@ -17,6 +17,7 @@ services:
       - ./php-apache/php/conf.d/php.ini:/usr/local/etc/php/conf.d/zz-php.ini
     ports:
       - "80:80"
+      - "443:443"
     networks:
       static-ip:
         ipv4_address: 10.5.0.5
