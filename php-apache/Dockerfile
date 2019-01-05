@@ -31,4 +31,7 @@ RUN useradd -M -U ${USER_NAME} -u ${UID} -p1 -d /var/www/html -s /bin/bash -G ro
 ENV APACHE_RUN_USER ${USER_NAME}
 ENV APACHE_RUN_GROUP ${USER_NAME}
 
+ENV SSL_CERT_DIR /etc/ssl/certs/apache2
+ENV SSL_PRIV_DIR /etc/ssl/private/apache2
+
 RUN rm -rf /var/lib/apt/lists/*
