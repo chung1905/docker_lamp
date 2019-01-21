@@ -26,7 +26,8 @@ RUN a2enmod headers
 ARG USER_NAME
 ARG UID
 
-RUN useradd -M -U ${USER_NAME} -u ${UID} -p1 -d /var/www/html -s /bin/bash -G root -o
+RUN useradd -m -U ${USER_NAME} -u ${UID} -p1 -s /bin/bash -G root -o
+COPY ./bash/.bashrc /home/${USER_NAME}
 
 ENV APACHE_RUN_USER ${USER_NAME}
 ENV APACHE_RUN_GROUP ${USER_NAME}
