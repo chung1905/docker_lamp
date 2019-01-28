@@ -1,53 +1,48 @@
 version: '3'
 
 services:
-  php-apache:
+  php:
     build:
-      context: ./php-apache
+      context: ./php
       args:
         USER_NAME: 'chung'
         UID: '1000'
-    container_name: php71
+    container_name: php
     restart: always
     volumes:
       - ./public_html/:/var/www/html/
-      - ./php-apache/apache2/apache2.conf:/etc/apache2/apache2.conf
-      - ./php-apache/apache2/sites-available:/etc/apache2/sites-available
-      - ./php-apache/ssl/certs:/etc/ssl/certs/apache2
-      - ./php-apache/ssl/private:/etc/ssl/private/apache2
-      - ./php-apache/apache2/sites-enabled:/etc/apache2/sites-enabled
-      - ./php-apache/php/conf.d/php.ini:/usr/local/etc/php/conf.d/zz-php.ini
+    networks:
+      docker-lamp:
+  httpd:
+    build:
+      context: ./httpd
+    container_name: httpd
+    restart: always
+    volumes:
+      - ./httpd/conf:/usr/local/apache2/conf/docker
+      - ./public_html/:/var/www/html/
     ports:
       - "80:80"
       - "443:443"
     networks:
-      static-ip:
-        ipv4_address: 10.5.0.5
-    links: 
-      - 'mariadb'
+      docker-lamp:
   mariadb:
     image: mariadb:10.3
-    container_name: mariadb
+    container_name: maziadb
     restart: always
     volumes:
       - ./mysql/data:/var/lib/mysql
-    expose:
-      - "3306"
     environment:
         MYSQL_ALLOW_EMPTY_PASSWORD: "no"
         MYSQL_ROOT_PASSWORD: "1"
     ports:
-      - 3306:3306
+      - "3306:3306"
     networks:
-      static-ip:
+      docker-lamp:
         ipv4_address: 10.5.0.6
 networks:
-  static-ip:
+  docker-lamp:
     driver: bridge
     ipam:
      config:
        - subnet: 10.5.0.0/16
-volumes:
-  mariadb:
-    driver_opts:
-      device: "./mysql/data"
