@@ -17,11 +17,11 @@ RUN docker-php-ext-install pdo_mysql mcrypt xsl intl zip bcmath -j$(nproc) gd so
 # Install xdebug
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
-RUN echo "xdebug.remote_enable=on\n\
+RUN echo $'xdebug.remote_enable=on\n\
 xdebug.remote_autostart=off\n\
 xdebug.remote_host=10.5.0.1\n\
 xdebug.remote_port=9000\n\
-xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+xdebug.remote_handler=dbgp' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Install cron
 RUN apt-get install -y cron
