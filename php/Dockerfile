@@ -25,6 +25,7 @@ xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.i
 
 # Set memory_limit
 RUN echo "php_admin_value[memory_limit] = 512M" >> /usr/local/etc/php-fpm.d/www.conf
+RUN echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/memory_limit.ini
 
 # Install cron
 #RUN apt-get install -y cron
