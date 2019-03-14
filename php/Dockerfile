@@ -31,6 +31,10 @@ COPY ./composer /usr/local/bin/
 RUN echo "php_admin_value[memory_limit] = 512M" >> /usr/local/etc/php-fpm.d/www.conf
 RUN echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/memory_limit.ini
 
+# Set execution timeout
+RUN echo "request_terminate_timeout = 0" >> /usr/local/etc/php-fpm.d/www.conf
+RUN echo "max_execution_time = 0" >> /usr/local/etc/php/conf.d/max_execution_time.ini
+
 # Install cron
 #RUN apt-get install -y cron
 
