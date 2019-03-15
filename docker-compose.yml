@@ -19,13 +19,15 @@ services:
       dockerfile: ./php56.Dockerfile
     container_name: php56
     entrypoint: ["echo", "Service disabled."]
-  httpd:
+  nginx:
     build:
-      context: ./httpd
-    container_name: httpd
+      context: ./nginx
+    container_name: nginx
+    restart: always
     volumes:
-      - ./httpd/conf:/usr/local/apache2/conf/docker
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
       - ./public_html/:/var/www/html/
+#      - ./public_html/:/usr/share/nginx/html/
     ports:
       - "80:80"
       - "443:443"
