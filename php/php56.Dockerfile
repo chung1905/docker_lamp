@@ -9,37 +9,23 @@ RUN apt-get -y update \
         libpng-dev \
         libjpeg-dev \
         libfreetype6-dev \
-        libjpeg62-turbo-dev
-RUN docker-php-ext-install -j$(nproc) iconv
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
-RUN docker-php-ext-install pdo_mysql mcrypt xsl intl zip bcmath -j$(nproc) gd soap
-
-# Install xdebug
-#RUN pecl install xdebug
-#RUN docker-php-ext-enable xdebug
-#RUN echo "xdebug.remote_enable=on\n\
-#xdebug.remote_autostart=off\n\
-#xdebug.remote_host=10.5.0.1\n\
-#xdebug.remote_port=9000\n\
-#xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+        libjpeg62-turbo-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install -j$(nproc) iconv \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install pdo_mysql mcrypt xsl intl zip bcmath -j$(nproc) gd soap
 
 # Install composer
 RUN mkdir -p /usr/local/bin
 COPY ./composer /usr/local/bin/
 
 # Set memory_limit
-RUN echo "php_admin_value[memory_limit] = 512M" >> /usr/local/etc/php-fpm.d/www.conf
-RUN echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/memory_limit.ini
+RUN echo "php_admin_value[memory_limit] = 512M" >> /usr/local/etc/php-fpm.d/www.conf \
+ && echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/memory_limit.ini
 
 # Set execution timeout
-RUN echo "request_terminate_timeout = 0" >> /usr/local/etc/php-fpm.d/www.conf
-RUN echo "max_execution_time = 0" >> /usr/local/etc/php/conf.d/max_execution_time.ini
-
-# Install cron
-#RUN apt-get install -y cron
-
-# Remove apt cache
-RUN rm -rf /var/lib/apt/lists/*
+RUN echo "request_terminate_timeout = 0" >> /usr/local/etc/php-fpm.d/www.conf \
+ && echo "max_execution_time = 0" >> /usr/local/etc/php/conf.d/max_execution_time.ini
 
 # Create non-root user
 ARG USER_NAME
