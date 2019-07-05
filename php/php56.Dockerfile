@@ -21,7 +21,7 @@ RUN useradd -m -U ${USER_NAME} -u ${UID} -p1 -s /bin/bash -G root -o \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) iconv \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install pdo_mysql mcrypt xsl intl zip bcmath -j$(nproc) gd soap gettext \
+    && docker-php-ext-install pdo_mysql mcrypt xsl intl zip bcmath -j$(nproc) gd soap gettext mysqli \
 # Set always_populate_raw_post_data
 && echo "always_populate_raw_post_data = -1" >> /usr/local/etc/php/conf.d/aprpd.ini \
 # Set memory_limit

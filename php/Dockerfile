@@ -21,7 +21,7 @@ RUN useradd -m -U ${USER_NAME} -u ${UID} -p1 -s /bin/bash -G root -o \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) iconv \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install pdo_mysql mcrypt xsl intl zip bcmath -j$(nproc) gd soap gettext \
+    && docker-php-ext-install pdo_mysql mcrypt xsl intl zip bcmath -j$(nproc) gd soap gettext mysqli \
 # Install xdebug
 && pecl install xdebug-2.6.1 \
 && docker-php-ext-enable xdebug \
