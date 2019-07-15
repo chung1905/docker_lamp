@@ -39,16 +39,29 @@ services:
     volumes:
       - ./mysql/data:/var/lib/mysql
     environment:
-        MYSQL_ALLOW_EMPTY_PASSWORD: "no"
-        MYSQL_ROOT_PASSWORD: "1"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: "1"
     ports:
       - "3306:3306"
     networks:
       docker-lamp:
         ipv4_address: 10.5.0.6
+  mongodb:
+    image: mongo:4.0
+    container_name: mongodb
+    restart: always
+    volumes:
+      - ./mongodb/data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1
+    ports:
+      - "27017:27017"
+    networks:
+      docker-lamp:
 networks:
   docker-lamp:
     driver: bridge
     ipam:
-     config:
-       - subnet: 10.5.0.0/16
+      config:
+        - subnet: 10.5.0.0/16
