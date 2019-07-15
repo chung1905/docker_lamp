@@ -18,7 +18,6 @@ services:
     build:
       dockerfile: ./php56.Dockerfile
     container_name: php56
-    entrypoint: ["echo", "Service disabled."]
   httpd:
     build:
       context: ./httpd
