@@ -8,22 +8,21 @@ services:
         USER_NAME: 'chung'
         UID: '1000'
     container_name: php71
-    restart: always
     volumes:
       - ./public_html/:/var/www/html/
     networks:
       docker-lamp:
-  #php56:
-  #  extends:
-  #    service: php
-  #  build:
-  #    dockerfile: ./php56.Dockerfile
-  #  container_name: php56
+  php56:
+    extends:
+      service: php
+    build:
+      dockerfile: ./php56.Dockerfile
+    container_name: php56
+    entrypoint: ["echo", "Service disabled."]
   httpd:
     build:
       context: ./httpd
     container_name: httpd
-    restart: always
     volumes:
       - ./httpd/conf:/usr/local/apache2/conf/docker
       - ./public_html/:/var/www/html/
@@ -35,28 +34,27 @@ services:
   mariadb:
     image: mariadb:10.3
     container_name: maziadb
-    restart: always
     volumes:
       - ./mysql/data:/var/lib/mysql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: "1"
-    ports:
-      - "3306:3306"
+    #ports:
+    #  - "3306:3306"
     networks:
       docker-lamp:
         ipv4_address: 10.5.0.6
   mongodb:
     image: mongo:4.0
     container_name: mongodb
-    restart: always
+    entrypoint: ["echo", "Service disabled."]
     volumes:
       - ./mongodb/data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 1
-    ports:
-      - "27017:27017"
+    #ports:
+    #  - "27017:27017"
     networks:
       docker-lamp:
 networks:
