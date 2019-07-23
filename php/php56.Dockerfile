@@ -39,5 +39,5 @@ opcache.enable_cli=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
 && echo "max_execution_time = 0" >> /usr/local/etc/php/conf.d/max_execution_time.ini \
 # Install composer
 && mkdir -p /usr/local/bin
-COPY ./composer /usr/local/bin/
+COPY ./bin/ /usr/local/bin/
 USER ${USER_NAME}

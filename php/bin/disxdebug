@@ -1,0 +1,5 @@
+#!/bin/bash
+TMPFILE=`mktemp --tmpdir`
+sed 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini > $TMPFILE
+cat $TMPFILE > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+rm $TMPFILE

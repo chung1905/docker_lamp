@@ -45,5 +45,6 @@ xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.i
 && echo "max_execution_time = 0" >> /usr/local/etc/php/conf.d/max_execution_time.ini \
 # Install composer
 && mkdir -p /usr/local/bin
-COPY ./composer /usr/local/bin/
+COPY ./bin/ /usr/local/bin/
+RUN chmod -R 666 /usr/local/etc/php/conf.d/* && /usr/local/bin/disxdebug
 USER ${USER_NAME}
