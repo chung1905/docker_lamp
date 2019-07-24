@@ -1,0 +1,24 @@
+#!/bin/bash
+
+filename='/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
+TMPFILE=`mktemp --tmpdir`
+
+# Get first line
+line=$(head -n 1 $filename)
+# If start with ";" and end with ".so"
+if [[ $line =~ ^\;.*extension=.*\.so$ ]]; then
+    echo 'Enabling...'
+    sed 's/^;//' $filename > $TMPFILE
+else
+    echo 'Disabling...'
+    sed 's/^/;/' $filename > $TMPFILE
+fi
+
+# Apply change from temporary file
+cat $TMPFILE > $filename
+
+# Restart docker & remove temporary file
+kill -USR2 1
+rm $TMPFILE
+
+#echo 'Done!'

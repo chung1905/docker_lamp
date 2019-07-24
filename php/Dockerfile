@@ -37,6 +37,7 @@ xdebug.remote_autostart=off\n\
 xdebug.remote_host=10.5.0.1\n\
 xdebug.remote_port=9000\n\
 xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+&& sed -i 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
 # Set memory_limit
 && echo "php_admin_value[memory_limit] = 512M" >> /usr/local/etc/php-fpm.d/www.conf \
 && echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/memory_limit.ini \
@@ -46,5 +47,7 @@ xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.i
 # Install composer
 && mkdir -p /usr/local/bin
 COPY ./bin/ /usr/local/bin/
-RUN chmod -R 666 /usr/local/etc/php/conf.d/* && /usr/local/bin/disxdebug
+RUN php /usr/local/bin/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+&& rm /usr/local/bin/composer-setup.php
+RUN chmod -R 666 /usr/local/etc/php/conf.d/*
 USER ${USER_NAME}
