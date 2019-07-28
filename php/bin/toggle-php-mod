@@ -1,6 +1,11 @@
 #!/bin/bash
 
-filename='/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
+filename="/usr/local/etc/php/conf.d/docker-php-ext-$1.ini"
+if [ ! -f "$filename" ]; then
+    echo "$filename not found."
+    exit 1
+fi
+
 TMPFILE=`mktemp --tmpdir`
 
 # Get first line
