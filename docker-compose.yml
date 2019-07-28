@@ -12,13 +12,13 @@ services:
       - ./public_html/:/var/www/html/
     networks:
       docker-lamp:
-  php56:
-    extends:
-      service: php
-    build:
-      dockerfile: ./php56.Dockerfile
-    container_name: php56
-    entrypoint: ["echo", "Service disabled."]
+#  php56:
+#    extends:
+#      service: php
+#    build:
+#      dockerfile: ./php56.Dockerfile
+#    container_name: php56
+#    entrypoint: ["echo", "Service disabled."]
   httpd:
     build:
       context: ./httpd
@@ -44,19 +44,19 @@ services:
     networks:
       docker-lamp:
         ipv4_address: 10.5.0.6
-  mongodb:
-    image: mongo:4.0
-    container_name: mongodb
-    entrypoint: ["echo", "Service disabled."]
-    volumes:
-      - ./mongodb/data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: 1
-    #ports:
-    #  - "27017:27017"
-    networks:
-      docker-lamp:
+#  mongodb:
+#    image: mongo:4.0
+#    container_name: mongodb
+#    entrypoint: ["echo", "Service disabled."]
+#    volumes:
+#      - ./mongodb/data:/data/db
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: 1
+#    #ports:
+#    #  - "27017:27017"
+#    networks:
+#      docker-lamp:
 networks:
   docker-lamp:
     driver: bridge
