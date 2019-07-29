@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 
 filename="/usr/local/etc/php/conf.d/docker-php-ext-$1.ini"
 if [ ! -f "$filename" ]; then

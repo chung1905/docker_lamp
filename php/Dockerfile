@@ -55,12 +55,15 @@ xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.i
 && echo "request_terminate_timeout = 0" >> /usr/local/etc/php-fpm.d/www.conf \
 && echo "max_execution_time = 0" >> /usr/local/etc/php/conf.d/max_execution_time.ini \
 
-# Install composer & custom scripts
-&& mkdir -p /usr/local/bin
-COPY ./bin/ /usr/local/bin/
-RUN php /usr/local/bin/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-&& rm /usr/local/bin/composer-setup.php \
+# Install composer
+&& php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
+&& php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+&& php -r "unlink('/tmp/composer-setup.php');" \
+
+# Install custom scripts
+&& mkdir -p /usr/local/bin \
 && chmod -R 666 /usr/local/etc/php/conf.d/*
+COPY ./bin/ /usr/local/bin/
 
 # Uncomment the following line to use mongodb
 #RUN pecl install mongodb && docker-php-ext-enable mongodb
