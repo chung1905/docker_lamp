@@ -12,6 +12,7 @@ RUN useradd -m -U ${USER_NAME} -u ${UID} -p1 -s /bin/bash -G root -o \
 && sed -i -e "s/www-data/${USER_NAME}/" /usr/local/etc/php-fpm.d/www.conf \
 
 # Install necessary libraries for Magento2
+# I add bash-completion for autocomplete "make" command
 && apt-get -y update \
     && apt-get -y install \
         libmcrypt-dev \
@@ -21,6 +22,7 @@ RUN useradd -m -U ${USER_NAME} -u ${UID} -p1 -s /bin/bash -G root -o \
         libjpeg-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
+        bash-completion \
     && apt-get -y autoremove \
     && apt-get -y autoclean \
     && rm -rf /var/lib/apt/lists/* \
