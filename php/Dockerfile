@@ -46,6 +46,7 @@ xdebug.remote_host=10.5.0.1\n\
 xdebug.remote_port=9000\n\
 xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
 && sed -i 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+&& echo "alias xdebug='php -d xdebug.remote_autostart=on'" >> /home/${USER_NAME}/.bashrc \
 
 # Set memory_limit
 && echo "php_admin_value[memory_limit] = 512M" >> /usr/local/etc/php-fpm.d/www.conf \
