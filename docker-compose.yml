@@ -12,12 +12,18 @@ services:
       - ./public_html/:/var/www/html/
     networks:
       docker-lamp:
-  # php72:
-    # extends:
-      # service: php
-    # build:
-      # dockerfile: ./php72.Dockerfile
-    # container_name: php72
+  php72:
+    extends:
+      service: php
+    build:
+      dockerfile: ./php72.Dockerfile
+    container_name: php72
+  php70:
+    extends:
+      service: php
+    build:
+      dockerfile: ./php70.Dockerfile
+    container_name: php70
   # php56:
     # extends:
       # service: php
