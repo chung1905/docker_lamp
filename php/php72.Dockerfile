@@ -29,7 +29,7 @@ RUN useradd -m -U ${USER_NAME} -u ${UID} -p1 -s /bin/bash -G root -o \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) iconv \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install pdo_mysql xsl intl zip bcmath -j$(nproc) gd soap gettext opcache \
+    && docker-php-ext-install pdo_mysql xsl intl zip bcmath -j$(nproc) gd soap gettext opcache exif \
 
 # Config opcache
 && echo "opcache.memory_consumption=128\n\
@@ -58,6 +58,9 @@ xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.i
 # Set execution timeout
 && echo "request_terminate_timeout = 0" >> /usr/local/etc/php-fpm.d/www.conf \
 && echo "max_execution_time = 0" >> /usr/local/etc/php/conf.d/max_execution_time.ini \
+
+# Set timezone
+&& echo "date.timezone = Asia/Ho_Chi_Minh" >> /usr/local/etc/php/conf.d/timezone.ini \
 
 # Install composer
 && php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
