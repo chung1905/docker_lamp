@@ -72,7 +72,14 @@ xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.i
 && chmod -R 666 /usr/local/etc/php/conf.d/*
 COPY ./bin/ /usr/local/bin/
 
-# Uncomment the following line to use mongodb
+# Uncomment the following lines to use the extensions
+RUN pecl install mailparse && docker-php-ext-enable mailparse
+RUN docker-php-ext-install mysqli
+RUN apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/*
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+    && docker-php-ext-install imap
 #RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 USER ${USER_NAME}
+
+RUN composer global require hirak/prestissimo
