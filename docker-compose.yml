@@ -6,7 +6,7 @@ services:
       context: ./php
       args:
         USER_NAME: 'chung'
-        UID: '1001'
+        UID: '1000'
     container_name: php71
     volumes:
       - ./public_html/:/var/www/html/
