@@ -4,32 +4,21 @@ services:
   php:
     build:
       context: ./php
+      dockerfile: ./php73.Dockerfile
       args:
         USER_NAME: 'chung'
         UID: '1000'
-    container_name: php71
+    container_name: php73
     volumes:
       - ./public_html/:/var/www/html/
     networks:
       docker-lamp:
-  php72:
+  php74:
     extends:
       service: php
     build:
-      dockerfile: ./php72.Dockerfile
-    container_name: php72
-#  php70:
-#    extends:
-#      service: php
-#    build:
-#      dockerfile: ./php70.Dockerfile
-#    container_name: php70
-  # php56:
-    # extends:
-      # service: php
-    # build:
-      # dockerfile: ./php56.Dockerfile
-    # container_name: php56
+      dockerfile: ./php74.Dockerfile
+    container_name: php74
   httpd:
     build:
       context: ./httpd
@@ -50,32 +39,9 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: "1"
-    #ports:
-    #  - "3306:3306"
     networks:
       docker-lamp:
         ipv4_address: 10.5.0.100
-#  nodejs:
-#    build:
-#      context: ./nodejs
-#    container_name: nodejs
-#    volumes:
-#      - ./public_html/:/var/www/html/
-#    networks:
-#      docker-lamp:
-#  mongodb:
-#    image: mongo:4.0
-#    container_name: mongodb
-#    entrypoint: ["echo", "Service disabled."]
-#    volumes:
-#      - ./mongodb/data:/data/db
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: 1
-#    #ports:
-#    #  - "27017:27017"
-#    networks:
-#      docker-lamp:
 networks:
   docker-lamp:
     driver: bridge
