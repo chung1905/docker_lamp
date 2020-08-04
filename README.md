@@ -23,6 +23,12 @@ docker-compose up -d
 please browse to: 
   - `http://public.project.php73` to run your application with PHP 7.3,
   - `http://public.project.php74` (PHP 7.4)
+- Tip:
+  - You can use dnsmasq instead of /etc/hosts, example:
+```
+# Redirect all sites in 4 domains (phpXX) to 127.0.0.1
+address=/php71/php72/php73/php74/127.0.0.1
+```
 
 ### Custom VirtualHost
 - Add your VirtualHost config files to `./httpd/conf/vhosts/`
