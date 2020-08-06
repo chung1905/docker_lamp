@@ -8,6 +8,7 @@ services:
       args:
         USER_NAME: 'chung'
         UID: '1000'
+        TIME_ZONE: 'Asia/Ho_Chi_Minh'
     container_name: php73
     volumes:
       - ./public_html/:/var/www/html/
