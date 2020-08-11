@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 # Create non-root user
 ARG USER_NAME
@@ -27,7 +27,7 @@ RUN useradd -m -U ${USER_NAME} -u ${UID} -p1 -s /bin/bash -G root -o \
     && apt-get -y autoclean \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) iconv \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install pdo_mysql xsl intl zip bcmath -j$(nproc) gd soap gettext opcache exif sockets \
 ## Config opcache
 && echo "opcache.memory_consumption=128\n\
