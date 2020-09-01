@@ -1,14 +1,14 @@
 FROM php:7.4-fpm
 
 # Create non-root user
-ARG USER_NAME
+ARG USER
 ARG UID
 ARG TIME_ZONE
-RUN useradd -m -U ${USER_NAME} -u ${UID} -p1 -s /bin/bash -G root -o \
+RUN useradd -m -U ${USER} -u ${UID} -p1 -s /bin/bash -G root -o \
 ## Edit PS1 in basrc
-&& echo "PS1='${debian_chroot:+($debian_chroot)}\w\$ '" >> /home/${USER_NAME}/.bashrc \
-## Change www-data user to ${USER_NAME}
-&& sed -i -e "s/www-data/${USER_NAME}/" /usr/local/etc/php-fpm.d/www.conf \
+&& echo "PS1='${debian_chroot:+($debian_chroot)}\w\$ '" >> /home/${USER}/.bashrc \
+## Change www-data user to ${USER}
+&& sed -i -e "s/www-data/${USER}/" /usr/local/etc/php-fpm.d/www.conf \
 ## Install necessary libraries for Magento2
 ## I add bash-completion for autocomplete "make" command
 && apt-get -y update \
@@ -46,7 +46,7 @@ xdebug.remote_host=10.5.0.1\n\
 xdebug.remote_port=9000\n\
 xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
 && sed -i 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-&& echo "alias xdebug='php -d xdebug.remote_autostart=on'" >> /home/${USER_NAME}/.bashrc \
+&& echo "alias xdebug='php -d xdebug.remote_autostart=on'" >> /home/${USER}/.bashrc \
 ## Set memory_limit
 && echo "php_admin_value[memory_limit] = 512M" >> /usr/local/etc/php-fpm.d/www.conf \
 && echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/memory_limit.ini \
@@ -72,6 +72,6 @@ RUN pecl install mailparse && docker-php-ext-enable mailparse \
     && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install imap
 
-USER ${USER_NAME}
+USER ${USER}
 
 RUN composer global require hirak/prestissimo

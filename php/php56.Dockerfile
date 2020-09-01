@@ -1,13 +1,13 @@
 FROM php:5.6-fpm
 
 # Create non-root user
-ARG USER_NAME
+ARG USER
 ARG UID
-RUN useradd -m -U ${USER_NAME} -u ${UID} -p1 -s /bin/bash -G root -o \
+RUN useradd -m -U ${USER} -u ${UID} -p1 -s /bin/bash -G root -o \
 # Edit PS1 in basrc
-&& echo "PS1='${debian_chroot:+($debian_chroot)}\w\$ '" >> /home/${USER_NAME}/.bashrc \
-# Change www-data user to ${USER_NAME}
-&& sed -i -e "s/www-data/${USER_NAME}/" /usr/local/etc/php-fpm.d/www.conf \
+&& echo "PS1='${debian_chroot:+($debian_chroot)}\w\$ '" >> /home/${USER}/.bashrc \
+# Change www-data user to ${USER}
+&& sed -i -e "s/www-data/${USER}/" /usr/local/etc/php-fpm.d/www.conf \
 # Install necessary libraries for Magento2
 && apt-get -y update \
     && apt-get install -y \
@@ -44,4 +44,4 @@ RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php')
 && php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
 && php -r "unlink('/tmp/composer-setup.php');"
 RUN echo "date.timezone = Asia/Ho_Chi_Minh" >> /usr/local/etc/php/conf.d/timezone.ini
-USER ${USER_NAME}
+USER ${USER}
