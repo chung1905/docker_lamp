@@ -4,8 +4,6 @@ FROM php:7.3-fpm
 ARG USER
 ARG UID
 ARG TIME_ZONE
-RUN echo ${USER}
-RUN echo ${UID}
 RUN useradd -m -U ${USER} -u ${UID} -p1 -s /bin/bash -G root -o \
 ## Edit PS1 in basrc
 && echo "PS1='${debian_chroot:+($debian_chroot)}\w\$ '" >> /home/${USER}/.bashrc \

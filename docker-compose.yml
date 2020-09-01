@@ -7,7 +7,7 @@ services:
       dockerfile: ./php73.Dockerfile
       args:
         USER: #leave it empty to use your current user
-        UID: '1000'
+        UID: "$UUID"
         TIME_ZONE: 'Asia/Ho_Chi_Minh'
     container_name: php73
     volumes:

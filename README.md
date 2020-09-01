@@ -5,11 +5,13 @@ This docker setup has been tested with Magento 2, Wordpress and Symfony 2 -> Sym
 ## How to set up:
 1. Install docker and docker-compose properly
 2. Clone project and `cd` into the that
-3. Edit UID in `docker-compose.yml` to your current user ID to avoid permissions issues (usually it's 1000).
-4. Edit USER to whatever you want (optional). Default is your current user.
-5. Create and run container:
+3. Create and run container:
 ```shell script
-docker-compose up -d
+make
+```
+or
+```shell script
+UUID=$(shell id -u) docker-compose up -d
 ```
 
 ## PHP web application:
