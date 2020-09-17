@@ -5,13 +5,13 @@ This docker setup has been tested with Magento 2, Wordpress and Symfony 2 -> Sym
 ## How to set up:
 1. Install docker and docker-compose properly
 2. Clone project and `cd` into the that
-3. Create and run container:
-```shell script
-make
+3. Create .env file
 ```
-or
-```shell script
-UUID=$(shell id -u) docker-compose up -d
+echo "UID=$UID" > .env
+```
+4. Create and run container:
+```
+docker-compose up -d
 ```
 
 ## PHP web application:
