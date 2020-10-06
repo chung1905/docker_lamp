@@ -14,12 +14,12 @@ services:
       - ./public_html/:/var/www/html/
     networks:
       docker-lamp:
-  php74:
+  php71:
     extends:
       service: php
     build:
-      dockerfile: ./php74.Dockerfile
-    container_name: php74
+      dockerfile: ./php71.Dockerfile
+    container_name: php71
   httpd:
     build:
       context: ./httpd
