@@ -73,5 +73,3 @@ RUN pecl install mailparse && docker-php-ext-enable mailparse \
     && docker-php-ext-install imap
 
 USER ${USER}
-
-RUN composer global require hirak/prestissimo

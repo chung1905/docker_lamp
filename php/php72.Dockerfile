@@ -81,5 +81,3 @@ RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 #RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 USER ${USER}
-
-RUN composer global require hirak/prestissimo
