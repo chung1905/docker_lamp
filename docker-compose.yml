@@ -26,7 +26,7 @@ services:
     container_name: httpd
     volumes:
       - ./httpd/conf:/usr/local/apache2/conf/docker:ro
-      - ./httpd/log:/usr/local/apache2/logs
+      - ./httpd/logs:/usr/local/apache2/logs
       - ./public_html:/var/www/html:ro
     ports:
       - "80:80"
