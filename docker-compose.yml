@@ -7,8 +7,10 @@ services:
       dockerfile: ./php73.Dockerfile
       args:
         USER: #leave it empty to use your current user
-        UID: "${UID:-1000}" # https://docs.docker.com/compose/compose-file/#variable-substitution
-        TIME_ZONE: "${TIME_ZONE:-Asia/Ho_Chi_Minh}"
+        UID: ${UID:-1000} # https://docs.docker.com/compose/compose-file/#variable-substitution
+        TIME_ZONE: ${TIME_ZONE:-Asia/Ho_Chi_Minh}
+    environment:
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
     container_name: php73
     volumes:
       - ./public_html/:/var/www/html/
