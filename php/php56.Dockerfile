@@ -44,5 +44,5 @@ COPY ./bin/ /usr/local/bin/
 RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
 && php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
 && php -r "unlink('/tmp/composer-setup.php');"
-RUN echo "date.timezone = Asia/Ho_Chi_Minh" >> /usr/local/etc/php/conf.d/timezone.ini
+RUN echo "date.timezone = ${TIME_ZONE}" >> /usr/local/etc/php/conf.d/timezone.ini
 USER ${USER}
