@@ -4,11 +4,12 @@ services:
   php:
     build:
       context: ./php
-      dockerfile: ./php73.Dockerfile
+      dockerfile: ./php.Dockerfile
       args:
         USER: #leave it empty to use your current user
         UID: ${UID:-1000} # https://docs.docker.com/compose/compose-file/#variable-substitution
         TIME_ZONE: ${TIME_ZONE:-Asia/Ho_Chi_Minh}
+        PHP_VER: ${PHP_VER:-7.3}
     environment:
       XDEBUG_MODE: ${XDEBUG_MODE:-off}
     container_name: php73
@@ -16,12 +17,13 @@ services:
       - ./public_html/:/var/www/html/
     networks:
       docker-lamp:
-  php71:
-    extends:
-      service: php
-    build:
-      dockerfile: ./php71.Dockerfile
-    container_name: php71
+#  php71:
+#    extends:
+#      service: php
+#    build:
+#      args:
+#        PHP_VER: 7.1
+#    container_name: php71
   httpd:
     build:
       context: ./httpd
