@@ -48,8 +48,7 @@ opcache.blacklist_filename=/var/www/html/opcache.blacklist_filename.ini" >> /usr
 # Install xdebug
 RUN pecl install xdebug \
 && docker-php-ext-enable xdebug \
-&& echo "xdebug.mode=debug\n\
-xdebug.client_host=10.5.0.1\n\
+&& echo "xdebug.client_host=10.5.0.1\n\
 xdebug.start_with_request=trigger" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
 && sed -i 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
