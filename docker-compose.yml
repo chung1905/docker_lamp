@@ -23,6 +23,7 @@ services:
 #    build:
 #      args:
 #        PHP_VER: 7.1
+#        XDEBUG_VER: 2.9.8
 #    container_name: php71
   httpd:
     build:

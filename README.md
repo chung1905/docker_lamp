@@ -20,7 +20,7 @@ docker-compose up -d
 - Your MariaDB database credentials: `root:1@10.5.0.100:3306` or `root:1@maziadb:3306`
 
 ### Default VirtualHost
-- PHP is pre-setup with 2 versions: PHP 7.3 and PHP 7.4
+- Default PHP version(s): PHP 7.3
 - Assume your `index.php` is located at `./public_html/projectname/public/index.php`,
 please browse to: 
   - `http://public.project.php73` to run your application with PHP 7.3,
