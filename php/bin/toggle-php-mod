@@ -34,8 +34,8 @@ toggle() {
     # Get first line
     local line
     line=$(head -n 1 "$1")
-    # If start with ";"
-    if [[ "$line" =~ ^\; ]]; then
+    # If start with ";" and contain "extension=" in line
+    if [[ "$line" =~ ^\;.*extension=.+$ ]]; then
         echo 'Enabling...'
         sed 's/^;//' "$1" > "${TMP_FILE}"
     else
