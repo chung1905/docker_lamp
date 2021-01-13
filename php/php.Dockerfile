@@ -48,7 +48,7 @@ opcache.blacklist_filename=/var/www/html/opcache.blacklist_filename.ini" >> /usr
 # Install xdebug
 ARG XDEBUG_VER=stable
 RUN pecl install xdebug-${XDEBUG_VER} && docker-php-ext-enable xdebug
-COPY ./config/docker-php-ext-xdebug-${XDEBUG_VER}.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+COPY ./config/xdebug-config-${XDEBUG_VER}.ini /usr/local/etc/php/conf.d/xdebug-config.ini
 RUN sed -i 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Set memory_limit
