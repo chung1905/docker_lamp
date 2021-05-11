@@ -49,6 +49,20 @@ services:
     networks:
       docker-lamp:
         ipv4_address: 10.5.0.100
+  elasticsearch:
+    image: elasticsearch:7.12.1
+    container_name: elasticsearch
+    volumes:
+      - './elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
+      - 'esdata:/usr/share/elasticsearch/data'
+    environment:
+      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
+    networks:
+      docker-lamp:
+
+volumes:
+  esdata:
+
 networks:
   docker-lamp:
     driver: bridge
