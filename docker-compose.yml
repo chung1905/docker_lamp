@@ -17,14 +17,20 @@ services:
       - ./public_html/:/var/www/html/
     networks:
       docker-lamp:
-#  php71:
-#    extends:
-#      service: php
-#    build:
-#      args:
-#        PHP_VER: 7.1
-#        XDEBUG_VER: 2.9.8
-#    container_name: php71
+  php74:
+    extends:
+      service: php
+    build:
+      dockerfile: ./php74.Dockerfile
+      args:
+        PHP_VER: 7.4
+    container_name: php74
+  nodejs:
+    build:
+      context: ./nodejs
+    volumes:
+      - ./public_html/:/var/www/html/
+    entrypoint: ["tail", "-f", "/dev/null"]
   httpd:
     build:
       context: ./httpd
