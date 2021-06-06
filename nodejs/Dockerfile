@@ -1,6 +1,5 @@
 FROM node:lts-slim
 
-# Install necessary libraries for Magento2
 # I add bash-completion for autocomplete "make" command
 RUN apt-get -y update \
     && apt-get -y install \
@@ -11,5 +10,6 @@ RUN apt-get -y update \
     && apt-get autoclean -y \
     && rm -rf /var/lib/apt/lists/*
 
+RUN npm install --global sass
 WORKDIR /var/www/html
 USER node
