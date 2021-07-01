@@ -1,4 +1,4 @@
-ARG PHP_VER=7.3
+ARG PHP_VER=7.4
 ARG PHP_IMG=php:${PHP_VER}-fpm
 
 FROM ${PHP_IMG}
@@ -36,6 +36,25 @@ RUN apt-get -y update \
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) iconv pdo_mysql xsl intl zip bcmath gd soap gettext opcache exif sockets
 
+# Uncomment the following lines to use the extensions
+RUN pecl install mailparse && docker-php-ext-enable mailparse \
+    && apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/* \
+    && apt-get autoremove -y\
+    && apt-get autoclean -y\
+    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+    && docker-php-ext-install -j$(nproc) imap mysqli
+
+# Install xdebug
+ARG XDEBUG_VER=stable
+RUN pecl install xdebug-${XDEBUG_VER} && docker-php-ext-enable xdebug
+COPY ./config/xdebug-config-${XDEBUG_VER}.ini /usr/local/etc/php/conf.d/xdebug-config.ini
+RUN sed -i 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+# Install composer
+RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
+&& php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+&& php -r "unlink('/tmp/composer-setup.php');"
+
 # Config opcache
 RUN echo "opcache.memory_consumption=128\n\
 opcache.interned_strings_buffer=8\n\
@@ -44,12 +63,6 @@ opcache.revalidate_freq=60\n\
 opcache.fast_shutdown=1\n\
 opcache.enable_cli=1\n\
 opcache.blacklist_filename=/var/www/html/opcache.blacklist_filename.ini" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
-
-# Install xdebug
-ARG XDEBUG_VER=stable
-RUN pecl install xdebug-${XDEBUG_VER} && docker-php-ext-enable xdebug
-COPY ./config/xdebug-config-${XDEBUG_VER}.ini /usr/local/etc/php/conf.d/xdebug-config.ini
-RUN sed -i 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Set memory_limit
 RUN echo "php_admin_value[memory_limit] = 512M" >> /usr/local/etc/php-fpm.d/www.conf \
@@ -62,23 +75,10 @@ RUN echo "request_terminate_timeout = 0" >> /usr/local/etc/php-fpm.d/www.conf \
 # Set timezone
 RUN echo "date.timezone = ${TIME_ZONE}" >> /usr/local/etc/php/conf.d/timezone.ini
 
-# Install composer
-RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
-&& php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-&& php -r "unlink('/tmp/composer-setup.php');"
-
 # Install custom scripts
 RUN mkdir -p /usr/local/bin \
 && chmod -R 666 /usr/local/etc/php/conf.d/*
 
 COPY ./bin/* /usr/local/bin/
-
-# Uncomment the following lines to use the extensions
-RUN pecl install mailparse && docker-php-ext-enable mailparse \
-    && apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/* \
-    && apt-get autoremove -y\
-    && apt-get autoclean -y\
-    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-install -j$(nproc) imap mysqli
 
 USER ${USER}
