@@ -6,6 +6,7 @@ RUN apt-get -y update \
         bzip2 \
         bash-completion \
         git \
+        make \
     && apt-get autoremove -y \
     && apt-get autoclean -y \
     && rm -rf /var/lib/apt/lists/*
