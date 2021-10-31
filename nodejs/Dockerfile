@@ -7,6 +7,7 @@ RUN apt-get -y update \
         bash-completion \
         git \
         make \
+	curl \
     && apt-get autoremove -y \
     && apt-get autoclean -y \
     && rm -rf /var/lib/apt/lists/*
@@ -14,3 +15,4 @@ RUN apt-get -y update \
 RUN npm install --global sass
 WORKDIR /var/www/html
 USER node
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
