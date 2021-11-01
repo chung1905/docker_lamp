@@ -28,6 +28,8 @@ services:
   nodejs:
     build:
       context: ./nodejs
+      args:
+        UID: ${UID:-1000}
     volumes:
       - ./public_html/:/var/www/html/
     entrypoint: ["tail", "-f", "/dev/null"]
