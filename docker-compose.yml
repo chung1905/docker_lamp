@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3'
 
 services:
   php:
@@ -16,12 +16,11 @@ services:
     volumes:
       - ./public_html/:/var/www/html/
     networks:
-      docker-lamp:
+      - docker-lamp
   php74:
     extends:
       service: php
     build:
-      dockerfile: ./php74.Dockerfile
       args:
         PHP_VER: 7.4
     container_name: php74
@@ -45,7 +44,7 @@ services:
       - "80:80"
       - "443:443"
     networks:
-      docker-lamp:
+      - docker-lamp
   mariadb:
     image: mariadb:10.4
     container_name: maziadb
@@ -58,7 +57,7 @@ services:
       docker-lamp:
         ipv4_address: 10.5.0.100
   elasticsearch:
-    image: elasticsearch:7.12.1
+    image: elasticsearch:7.17.2
     container_name: elasticsearch
     volumes:
       - './elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
@@ -66,7 +65,7 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xmx2g -Xms2g"
     networks:
-      docker-lamp:
+      - docker-lamp
 
 volumes:
   esdata:

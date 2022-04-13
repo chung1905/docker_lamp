@@ -1,12 +1,9 @@
-# For php7.3 or older
-ARG PHP_VER=7.3
+ARG PHP_VER
 ARG PHP_IMG=php:${PHP_VER}-fpm
 
 FROM ${PHP_IMG}
 
-ARG USER
-ARG UID
-ARG TIME_ZONE
+ARG PHP_VER USER UID TIME_ZONE
 
 # Create non-root user
 RUN useradd -m -U ${USER} -u ${UID} -p1 -s /bin/bash -G root -o \
@@ -34,8 +31,11 @@ RUN apt-get -y update \
     && apt-get autoclean -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-   && docker-php-ext-install -j$(nproc) iconv pdo_mysql xsl intl zip bcmath gd soap gettext opcache exif sockets
+# If php version is from 7.0 to 7.3 use the first command, else the latter
+RUN echo "7.0 7.1 7.2 7.3" | grep -w -q ${PHP_VER} \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    || docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
+RUN docker-php-ext-install -j$(nproc) iconv pdo_mysql xsl intl zip bcmath gd soap gettext opcache exif sockets
 
 # Uncomment the following lines to use the extensions
 RUN pecl install mailparse && docker-php-ext-enable mailparse \
