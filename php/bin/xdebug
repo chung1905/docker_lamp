@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+
+export_phpstorm_config() {
+  local workspace_file='./.idea/workspace.xml'
+
+  if [[ ! -f "${workspace_file}" ]]; then
+    return
+  fi
+
+  local SERVER_NAME
+  # get the first server name in $workspace_file
+  SERVER_NAME=$(grep -Po '^\s*<server\s.*name="[^"]*"' $workspace_file | sed -r 's/.*name="([^\"]*)"/\1/')
+
+  export PHP_IDE_CONFIG="serverName=$SERVER_NAME"
+  echo "export PHP_IDE_CONFIG=\"serverName=$SERVER_NAME\""
+}
+
+export_phpstorm_config
+
+php "$@"
