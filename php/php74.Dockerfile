@@ -1,3 +1,4 @@
+# For php7.4 or later
 ARG PHP_VER=7.4
 ARG PHP_IMG=php:${PHP_VER}-fpm
 
@@ -53,7 +54,9 @@ RUN sed -i 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
 && php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-&& php -r "unlink('/tmp/composer-setup.php');"
+&& php -r "unlink('/tmp/composer-setup.php');" \
+&& cp `which composer` /usr/local/bin/composer1 \
+&& composer1 self-update --1
 
 # Config opcache
 RUN echo "opcache.memory_consumption=128\n\
@@ -65,8 +68,8 @@ opcache.enable_cli=1\n\
 opcache.blacklist_filename=/var/www/html/opcache.blacklist_filename.ini" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 
 # Set memory_limit
-RUN echo "php_admin_value[memory_limit] = 512M" >> /usr/local/etc/php-fpm.d/www.conf \
-&& echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/memory_limit.ini
+RUN echo "php_admin_value[memory_limit] = 2G" >> /usr/local/etc/php-fpm.d/www.conf \
+&& echo "memory_limit = 2G" >> /usr/local/etc/php/conf.d/memory_limit.ini
 
 # Set execution timeout
 RUN echo "request_terminate_timeout = 0" >> /usr/local/etc/php-fpm.d/www.conf \
