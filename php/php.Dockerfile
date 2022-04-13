@@ -71,6 +71,9 @@ opcache.blacklist_filename=/var/www/html/opcache.blacklist_filename.ini" >> /usr
 RUN echo "php_admin_value[memory_limit] = 2G" >> /usr/local/etc/php-fpm.d/www.conf \
 && echo "memory_limit = 2G" >> /usr/local/etc/php/conf.d/memory_limit.ini
 
+# Set upload_max_file
+RUN echo "upload_max_filesize = 100M" >> /usr/local/etc/php/conf.d/upload_max_filesize.ini
+
 # Set execution timeout
 RUN echo "request_terminate_timeout = 0" >> /usr/local/etc/php-fpm.d/www.conf \
 && echo "max_execution_time = 0" >> /usr/local/etc/php/conf.d/max_execution_time.ini
