@@ -54,9 +54,8 @@ RUN sed -i 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
 && php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-&& php -r "unlink('/tmp/composer-setup.php');" \
-&& cp `which composer` /usr/local/bin/composer1 \
-&& composer1 self-update --1
+&& php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer1 --1 \
+&& php -r "unlink('/tmp/composer-setup.php');"
 
 # Config opcache
 RUN echo "opcache.memory_consumption=128\n\
