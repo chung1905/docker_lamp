@@ -25,6 +25,14 @@ services:
         PHP_VER: 8.0
         XDEBUG_VER: stable
     container_name: php80
+  nodejs:
+    build:
+      context: ./nodejs
+      args:
+        UID: ${UID:-1000}
+    volumes:
+      - ./public_html/:/var/www/html/
+    entrypoint: ["tail", "-f", "/dev/null"]
   httpd:
     build:
       context: ./httpd
