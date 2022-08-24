@@ -12,26 +12,19 @@ services:
         PHP_VER: ${PHP_VER:-7.3}
     environment:
       XDEBUG_MODE: ${XDEBUG_MODE:-off}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     container_name: php73
     volumes:
       - ./public_html/:/var/www/html/
-    networks:
-      - docker-lamp
-  php74:
+  php80:
     extends:
       service: php
     build:
       args:
-        PHP_VER: 7.4
-    container_name: php74
-  nodejs:
-    build:
-      context: ./nodejs
-      args:
-        UID: ${UID:-1000}
-    volumes:
-      - ./public_html/:/var/www/html/
-    entrypoint: ["tail", "-f", "/dev/null"]
+        PHP_VER: 8.0
+        XDEBUG_VER: stable
+    container_name: php80
   httpd:
     build:
       context: ./httpd
@@ -43,8 +36,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    networks:
-      - docker-lamp
   mariadb:
     image: mariadb:10.4
     container_name: maziadb
@@ -53,26 +44,5 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: "1"
-    networks:
-      docker-lamp:
-        ipv4_address: 10.5.0.100
-  elasticsearch:
-    image: elasticsearch:7.17.2
-    container_name: elasticsearch
-    volumes:
-      - './elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
-      - 'esdata:/usr/share/elasticsearch/data'
-    environment:
-      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
-    networks:
-      - docker-lamp
-
-volumes:
-  esdata:
-
-networks:
-  docker-lamp:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 10.5.0.0/24
+    ports:
+      - "3306:3306"
