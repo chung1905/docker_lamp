@@ -9,12 +9,12 @@ services:
         USER: #leave it empty to use your current user
         UID: ${UID:-1000} # https://docs.docker.com/compose/compose-file/#variable-substitution
         TIME_ZONE: ${TIME_ZONE:-Asia/Ho_Chi_Minh}
-        PHP_VER: ${PHP_VER:-7.3}
-    environment:
-      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+        PHP_VER: ${PHP_VER:-7.1}
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    container_name: php73
+    environment:
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+    container_name: php71
     volumes:
       - ./public_html/:/var/www/html/
   php82:
@@ -24,14 +24,14 @@ services:
       args:
         PHP_VER: 8.2
     container_name: php82
-  nodejs:
-    build:
-      context: ./nodejs
-      args:
-        UID: ${UID:-1000}
-    volumes:
-      - ./public_html/:/var/www/html/
-    entrypoint: ["tail", "-f", "/dev/null"]
+#  nodejs:
+#    build:
+#      context: ./nodejs
+#      args:
+#        UID: ${UID:-1000}
+#    volumes:
+#      - ./public_html/:/var/www/html/
+#    entrypoint: ["tail", "-f", "/dev/null"]
   httpd:
     build:
       context: ./httpd
@@ -43,11 +43,12 @@ services:
     ports:
       - "80:80"
       - "443:443"
-  mariadb:
-    image: mariadb:10.6
-    container_name: maziadb
+  mysql8:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql8
     volumes:
-      - ./mysql/data:/var/lib/mysql
+      - ./mysql8/data:/var/lib/mysql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: "1"
