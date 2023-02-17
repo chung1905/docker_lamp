@@ -37,6 +37,7 @@ RUN echo "7.0 7.1 7.2 7.3" | grep -w -q ${PHP_VER} \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     || docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
 RUN docker-php-ext-install -j$(nproc) iconv pdo_mysql xsl intl zip bcmath gd soap gettext opcache exif sockets
+RUN if [ "7.1" == "${PHP_VER}" ]; then docker-php-ext-install -j$(nproc) mcrypt; fi;
 
 # Uncomment the following lines to use the extensions
 # RUN echo "7.0 7.1 7.2" | (grep -w -q ${PHP_VER} \
