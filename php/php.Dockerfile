@@ -27,6 +27,7 @@ RUN apt-get -y update \
         libzip-dev \
         bash-completion \
         git \
+        unzip \
     && apt-get autoremove -y \
     && apt-get autoclean -y \
     && rm -rf /var/lib/apt/lists/*
@@ -38,12 +39,12 @@ RUN echo "7.0 7.1 7.2 7.3" | grep -w -q ${PHP_VER} \
 RUN docker-php-ext-install -j$(nproc) iconv pdo_mysql xsl intl zip bcmath gd soap gettext opcache exif sockets
 
 # Uncomment the following lines to use the extensions
-RUN pecl install mailparse && docker-php-ext-enable mailparse \
-    && apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/* \
-    && apt-get autoremove -y\
-    && apt-get autoclean -y\
-    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-install -j$(nproc) imap mysqli
+#RUN pecl install mailparse && docker-php-ext-enable mailparse \
+#    && apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/* \
+#    && apt-get autoremove -y\
+#    && apt-get autoclean -y\
+#    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+#    && docker-php-ext-install -j$(nproc) imap mysqli
 
 # Install xdebug
 ARG XDEBUG_VER=stable
