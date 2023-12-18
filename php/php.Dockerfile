@@ -47,10 +47,8 @@ RUN docker-php-ext-install -j$(nproc) iconv pdo_mysql xsl intl zip bcmath gd soa
 #    && docker-php-ext-install -j$(nproc) imap mysqli
 
 # Install xdebug
-ARG XDEBUG_VER=stable
-RUN pecl install xdebug-${XDEBUG_VER} && docker-php-ext-enable xdebug
-COPY ./config/xdebug-config-${XDEBUG_VER}.ini /usr/local/etc/php/conf.d/xdebug-config.ini
-RUN sed -i 's/^/;/' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+ADD ./xdebug /tmp/xdebug/
+RUN sh /tmp/xdebug/install-xdebug.sh
 
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" \
