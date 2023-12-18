@@ -17,14 +17,13 @@ services:
     container_name: php73
     volumes:
       - ./public_html/:/var/www/html/
-  php80:
+  php82:
     extends:
       service: php
     build:
       args:
-        PHP_VER: 8.0
-        XDEBUG_VER: stable
-    container_name: php80
+        PHP_VER: 8.2
+    container_name: php82
   nodejs:
     build:
       context: ./nodejs
