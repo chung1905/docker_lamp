@@ -8,6 +8,7 @@ case $PHP_VERSION in
     "7.4"|"7.3"|"7.2") XDEBUG_VERSION="3.1.6";;
     "7.1") XDEBUG_VERSION="2.9.8";;
     "7.0") XDEBUG_VERSION="2.7.2";;
+    "5.6"|"5.5") XDEBUG_VERSION="2.5.5";;
     *) XDEBUG_VERSION="stable";;
 esac
 
