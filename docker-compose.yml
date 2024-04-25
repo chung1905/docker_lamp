@@ -12,16 +12,20 @@ services:
       XDEBUG_MODE: ${XDEBUG_MODE:-off}
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    container_name: php73
     volumes:
       - ./public_html/:/var/www/html/
+  php81:
+    extends:
+      service: php
+    build:
+      args:
+        PHP_VER: 8.1
   php82:
     extends:
       service: php
     build:
       args:
         PHP_VER: 8.2
-    container_name: php82
   nodejs:
     build:
       context: ./nodejs
@@ -36,10 +40,16 @@ services:
       - discovery.type=single-node
     volumes:
       - ./opensearch/config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml
+#  elasticsearch:
+#    image: elasticsearch:7.17.20
+#    volumes:
+#      - './elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
+#      - 'esdata:/usr/share/elasticsearch/data'
+#    environment:
+#      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
   httpd:
     build:
       context: ./httpd
-    container_name: httpd
     volumes:
       - ./httpd/conf:/usr/local/apache2/conf/docker:ro
       - ./httpd/logs:/usr/local/apache2/logs
@@ -49,7 +59,6 @@ services:
       - "443:443"
   mariadb:
     image: mariadb:10.6
-    container_name: maziadb
     volumes:
       - ./mysql/data:/var/lib/mysql
     environment:
@@ -57,3 +66,6 @@ services:
       MYSQL_ROOT_PASSWORD: "1"
     ports:
       - "3306:3306"
+
+#volumes:
+#  esdata:
