@@ -7,7 +7,7 @@ services:
         USER: #leave it empty to use your current user
         UID: ${UID:-1000} # https://docs.docker.com/compose/compose-file/#variable-substitution
         TIME_ZONE: ${TIME_ZONE:-Asia/Ho_Chi_Minh}
-        PHP_VER: ${PHP_VER:-7.3}
+        PHP_VER: latest
     environment:
       XDEBUG_MODE: ${XDEBUG_MODE:-off}
     extra_hosts:
@@ -20,12 +20,12 @@ services:
     build:
       args:
         PHP_VER: 8.1
-  php82:
+  php74:
     extends:
       service: php
     build:
       args:
-        PHP_VER: 8.2
+        PHP_VER: 7.4
   nodejs:
     build:
       context: ./nodejs
@@ -34,19 +34,13 @@ services:
     volumes:
       - ./public_html/:/var/www/html/
     entrypoint: ["tail", "-f", "/dev/null"]
-  opensearch:
-    image: opensearchproject/opensearch:latest
-    environment:
-      - discovery.type=single-node
+  elasticsearch:
+    image: elasticsearch:7.17.20
     volumes:
-      - ./opensearch/config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml
-#  elasticsearch:
-#    image: elasticsearch:7.17.20
-#    volumes:
-#      - './elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
-#      - 'esdata:/usr/share/elasticsearch/data'
-#    environment:
-#      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
+      - './elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
+      - 'esdata:/usr/share/elasticsearch/data'
+    environment:
+      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
   httpd:
     build:
       context: ./httpd
@@ -67,5 +61,5 @@ services:
     ports:
       - "3306:3306"
 
-#volumes:
-#  esdata:
+volumes:
+  esdata:
