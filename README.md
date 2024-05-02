@@ -5,23 +5,25 @@ This docker setup has been tested with Magento 2, WordPress and Symfony 2 -> Sym
 ## How to set up:
 1. Install `docker` and `docker compose` properly
 2. Clone project and `cd` into the that
-3. Create .env file
-```
-echo "UID=$UID" > .env
-```
-4. Create Configuration File:
-- Create a file named `dclamp.env`.
-- Define PHP versions and activated services.
+3. Create configurations files
+- `.env` file
 ```shell
-PHP_VERSIONS='8.1 7.4'
-ACTIVATED_SERVICES='httpd mariadb opensearch'  # For more services, see compose-declaration.yml
+echo "UID=$UID" > .env
+echo "XDEBUG_MODE=debug" >> .env
 ```
-5. Generate `docker-compose.yml
+- `dclamp.env` file (define PHP versions and services)
+```shell
+# Choose what PHP version you want
+echo "PHP_VERSIONS='8.1 7.4'" > dclamp.env
+# For more services, see compose-declaration.yml
+echo "ACTIVATED_SERVICES='httpd mariadb opensearch'" > dclamp.env
+```
+4. Generate `docker-compose.yml`
 ```shell
 ./dclamp generate
 ```
-6. Create and run container:
-```
+5. Create and run container:
+```shell
 docker compose up -d
 ```
 
@@ -49,11 +51,11 @@ address=/php71/php72/php73/php74/127.0.0.1
 
 ## Use PHP CLI:
 - Run command
-```shell script
+```shell
 docker compose exec php73 /bin/bash
 ``` 
 or
-```shell script
+```shell
 docker compose exec php{xx} /bin/bash
 ```
 - Run you PHP application with command `php ...`
@@ -62,20 +64,20 @@ docker compose exec php{xx} /bin/bash
 
 ### Enable/Disable PHP xdebug:
 - After ```docker compose exec...``` into container, run
-```shell script
+```shell
 toggle-php-mod xdebug
 ```
 or shortcut
-```shell script
+```shell
 toggle-php-mod xd
 ```
 
 ### Enable/Disable PHP Opcache:
 - After ```docker compose exec...``` into container, run
-```shell script
+```shell
 toggle-php-mod opcache
 ```
 or shortcut
-```shell script
+```shell
 toggle-php-mod op
 ```
