@@ -26,7 +26,7 @@ services:
     image: elasticsearch:7.17.20
     volumes:
       - './search_engine/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
-      - 'esdata:/usr/share/elasticsearch/data'
+      - 'elasticsearch_data:/usr/share/elasticsearch/data'
     environment:
       ES_JAVA_OPTS: "-Xmx2g -Xms2g"
   opensearch:
@@ -35,7 +35,7 @@ services:
       - discovery.type=single-node
     volumes:
       - './search_engine/opensearch/config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml:ro'
-      - 'opensearchdata:/usr/share/opensearch/data'
+      - 'opensearch_data:/usr/share/opensearch/data'
   httpd:
     build:
       context: ./httpd
