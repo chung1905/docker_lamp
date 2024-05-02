@@ -20,12 +20,6 @@ services:
     build:
       args:
         PHP_VER: 8.1
-  php74:
-    extends:
-      service: php
-    build:
-      args:
-        PHP_VER: 7.4
   nodejs:
     build:
       context: ./nodejs
@@ -41,6 +35,13 @@ services:
       - 'esdata:/usr/share/elasticsearch/data'
     environment:
       ES_JAVA_OPTS: "-Xmx2g -Xms2g"
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - './opensearch/config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml:ro'
+      - 'opensearchdata:/usr/share/opensearch/data'
   httpd:
     build:
       context: ./httpd
@@ -54,7 +55,7 @@ services:
   mariadb:
     image: mariadb:10.6
     volumes:
-      - ./mysql/data:/var/lib/mysql
+      - ./mariadb/data:/var/lib/mysql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: "1"
@@ -63,3 +64,4 @@ services:
 
 volumes:
   esdata:
+  opensearchdata:
