@@ -1,66 +1,37 @@
+x-file-extends: &file-extends
+  file: compose-declaration.yml
+
 services:
-  php:
-    build:
-      context: ./php
-      dockerfile: ./php.Dockerfile
-      args:
-        USER: #leave it empty to use your current user
-        UID: ${UID:-1000} # https://docs.docker.com/compose/compose-file/#variable-substitution
-        TIME_ZONE: ${TIME_ZONE:-Asia/Ho_Chi_Minh}
-        PHP_VER: 8
-    environment:
-      XDEBUG_MODE: ${XDEBUG_MODE:-off}
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./public_html/:/var/www/html/
   php81:
     extends:
+      <<: *file-extends
       service: php
     build:
       args:
         PHP_VER: 8.1
-  nodejs:
+  php74:
+    extends:
+      <<: *file-extends
+      service: php
     build:
-      context: ./nodejs
       args:
-        UID: ${UID:-1000}
-    volumes:
-      - ./public_html/:/var/www/html/
-    entrypoint: ["tail", "-f", "/dev/null"]
-  elasticsearch:
-    image: elasticsearch:7.17.20
-    volumes:
-      - './elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
-      - 'esdata:/usr/share/elasticsearch/data'
-    environment:
-      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
+        PHP_VER: 7.4
+  nodejs:
+    extends:
+      <<: *file-extends
+      service: nodejs
   opensearch:
-    image: opensearchproject/opensearch:latest
-    environment:
-      - discovery.type=single-node
-    volumes:
-      - './opensearch/config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml:ro'
-      - 'opensearchdata:/usr/share/opensearch/data'
+    extends:
+      <<: *file-extends
+      service: opensearch
   httpd:
-    build:
-      context: ./httpd
-    volumes:
-      - ./httpd/conf:/usr/local/apache2/conf/docker:ro
-      - ./httpd/logs:/usr/local/apache2/logs
-      - ./public_html:/var/www/html:ro
-    ports:
-      - "80:80"
-      - "443:443"
+    extends:
+      <<: *file-extends
+      service: httpd
   mariadb:
-    image: mariadb:10.6
-    volumes:
-      - ./mariadb/data:/var/lib/mysql
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
-      MYSQL_ROOT_PASSWORD: "1"
-    ports:
-      - "3306:3306"
+    extends:
+      <<: *file-extends
+      service: mariadb
 
 volumes:
   esdata:
