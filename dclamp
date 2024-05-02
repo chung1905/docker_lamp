@@ -23,6 +23,10 @@ EOL
     docker_compose_content=$(cat <<EOL
 # This file is generated automatically via dclamp script.
 # Do not modify manually.
+x-file-extends: &file-extends
+  file: compose-declaration.yml
+
+services:
 EOL
 )
 
@@ -78,7 +82,14 @@ print_usage() {
     echo "    --print/-p       Print to stdout"
     echo "    --file/-f <filename>    Write to specified file (default: docker-compose.yml)"
     echo "    --config/-c <filename>   Use specified .env file (default: dclamp.env)"
-    echo "  config            Do nothing (placeholder for future functionality)"
+    echo "  config            Display brief configuration documentation"
+}
+
+# Function to display brief configuration documentation
+config_documentation() {
+    echo "Configuration File: dclamp.env"
+    echo "  - Define PHP versions: PHP_VERSIONS='8.1 7.4'"
+    echo "  - Define activated services: ACTIVATED_SERVICES='httpd mariadb opensearch'"
 }
 
 # Default values for options
@@ -123,8 +134,7 @@ case "$action" in
         fi
         ;;
     "config")
-        # Placeholder for future functionality
-        echo "Config action placeholder"
+        config_documentation
         ;;
     *)
         echo "Invalid action: $action"
