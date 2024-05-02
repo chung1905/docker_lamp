@@ -25,7 +25,7 @@ services:
   elasticsearch:
     image: elasticsearch:7.17.20
     volumes:
-      - './elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
+      - './search_engine/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
       - 'esdata:/usr/share/elasticsearch/data'
     environment:
       ES_JAVA_OPTS: "-Xmx2g -Xms2g"
@@ -34,7 +34,7 @@ services:
     environment:
       - discovery.type=single-node
     volumes:
-      - './opensearch/config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml:ro'
+      - './search_engine/opensearch/config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml:ro'
       - 'opensearchdata:/usr/share/opensearch/data'
   httpd:
     build:
@@ -46,10 +46,21 @@ services:
     ports:
       - "80:80"
       - "443:443"
+  mysql8:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql8
+    volumes:
+      - ./database_volumes/mysql8/data:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: "1"
+    ports:
+      - "3306:3306"
   mariadb:
     image: mariadb:10.6
     volumes:
-      - ./mariadb/data:/var/lib/mysql
+      - ./database_volumes/mariadb/data:/var/lib/mysql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: "1"

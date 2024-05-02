@@ -16,10 +16,6 @@ services:
     build:
       args:
         PHP_VER: 7.4
-  nodejs:
-    extends:
-      <<: *file-extends
-      service: nodejs
   opensearch:
     extends:
       <<: *file-extends
