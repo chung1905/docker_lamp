@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Function to generate docker-compose.yml content
 generate_docker_compose() {
-    # Load environment variables from .env file
-    if [[ -f $config_file ]]; then
+    # Load environment variables from dclamp.env file
+    if [ -f "$config_file" ]; then
         # shellcheck source=dclamp.env
-        source "$config_file"
+        . "$config_file"
     fi
 
     # Function to append service configurations
@@ -23,58 +23,51 @@ EOL
     docker_compose_content=$(cat <<EOL
 # This file is generated automatically via dclamp script.
 # Do not modify manually.
-x-file-extends: &file-extends
-  file: compose-declaration.yml
-
-services:
-
 EOL
 )
 
     # Include activated services
-    IFS=' ' read -r -a activated_services <<< "$ACTIVATED_SERVICES"
-    for service in "${activated_services[@]}"; do
-        docker_compose_content+="$(append_service "$service")"
+    for service in $ACTIVATED_SERVICES; do
+        docker_compose_content="$docker_compose_content$(append_service "$service")"
     done
 
     # Include PHP versions if specified
-    IFS=' ' read -r -a php_versions <<< "$PHP_VERSIONS"
-    for php_version in "${php_versions[@]}"; do
-        docker_compose_content+=$(cat <<EOL
-
+    for php_version in $PHP_VERSIONS; do
+        docker_compose_content="$docker_compose_content
   php${php_version//./}:
     extends:
       <<: *file-extends
       service: php
     build:
       args:
-        PHP_VER: $php_version
-EOL
-    )
+        PHP_VER: $php_version"
     done
 
     # Initialize volumes content
     volumes_content=""
 
     # Include volumes if Elasticsearch or OpenSearch is activated
-    if [[ " ${activated_services[*]} " =~ " elasticsearch " || " ${activated_services[*]} " =~ " opensearch " ]]; then
-        volumes_content+="\nvolumes:\n"
+    if [[ " $ACTIVATED_SERVICES " = *" elasticsearch "* || " $ACTIVATED_SERVICES " = *" opensearch "* ]]; then
+        volumes_content="
+volumes:"
     fi
 
     # Include Elasticsearch volume if activated
-    if [[ " ${activated_services[*]} " =~ " elasticsearch " ]]; then
-        volumes_content+="  elasticsearch_data:\n"
+    if [[ " $ACTIVATED_SERVICES " = *" elasticsearch "* ]]; then
+        volumes_content="$volumes_content
+  elasticsearch_data:"
     fi
 
     # Include OpenSearch volume if activated
-    if [[ " ${activated_services[*]} " =~ " opensearch " ]]; then
-        volumes_content+="  opensearch_data:\n"
+    if [[ " $ACTIVATED_SERVICES " = *" opensearch "* ]]; then
+        volumes_content="$volumes_content
+  opensearch_data:"
     fi
 
     # Append volumes content to docker-compose content
-    docker_compose_content+="$volumes_content"
+    docker_compose_content="$docker_compose_content$volumes_content"
 
-    echo -e "$docker_compose_content"
+    printf "%s\n" "$docker_compose_content"
 }
 
 # Function to print usage information
@@ -84,7 +77,7 @@ print_usage() {
     echo "  generate          Generate docker-compose.yml content"
     echo "    --print/-p       Print to stdout"
     echo "    --file/-f <filename>    Write to specified file (default: docker-compose.yml)"
-    echo "    --config/-c <filename>   Use specified .env file (default: config.env)"
+    echo "    --config/-c <filename>   Use specified .env file (default: dclamp.env)"
     echo "  config            Do nothing (placeholder for future functionality)"
 }
 
@@ -99,7 +92,7 @@ shift
 
 case "$action" in
     "generate")
-        while [[ $# -gt 0 ]]; do
+        while [ $# -gt 0 ]; do
             case "$1" in
                 --print|-p)
                     print_mode="print"
@@ -122,9 +115,9 @@ case "$action" in
             esac
         done
 
-        if [[ "$print_mode" == "print" ]]; then
+        if [ "$print_mode" = "print" ]; then
             generate_docker_compose
-        elif [[ "$print_mode" == "file" ]]; then
+        elif [ "$print_mode" = "file" ]; then
             generate_docker_compose > "$filename"
             echo "Generated docker-compose.yml content written to $filename"
         fi
