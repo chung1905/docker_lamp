@@ -1,0 +1,141 @@
+#!/bin/bash
+
+# Function to generate docker-compose.yml content
+generate_docker_compose() {
+    # Load environment variables from .env file
+    if [[ -f $config_file ]]; then
+        # shellcheck source=dclamp.env
+        source "$config_file"
+    fi
+
+    # Function to append service configurations
+    append_service() {
+        cat <<EOL
+
+  $1:
+    extends:
+      <<: *file-extends
+      service: $1
+EOL
+    }
+
+    # Initialize docker-compose.yml content with a note
+    docker_compose_content=$(cat <<EOL
+# This file is generated automatically via dclamp script.
+# Do not modify manually.
+x-file-extends: &file-extends
+  file: compose-declaration.yml
+
+services:
+
+EOL
+)
+
+    # Include activated services
+    IFS=' ' read -r -a activated_services <<< "$ACTIVATED_SERVICES"
+    for service in "${activated_services[@]}"; do
+        docker_compose_content+="$(append_service "$service")"
+    done
+
+    # Include PHP versions if specified
+    IFS=' ' read -r -a php_versions <<< "$PHP_VERSIONS"
+    for php_version in "${php_versions[@]}"; do
+        docker_compose_content+=$(cat <<EOL
+
+  php${php_version//./}:
+    extends:
+      <<: *file-extends
+      service: php
+    build:
+      args:
+        PHP_VER: $php_version
+EOL
+    )
+    done
+
+    # Initialize volumes content
+    volumes_content=""
+
+    # Include volumes if Elasticsearch or OpenSearch is activated
+    if [[ " ${activated_services[*]} " =~ " elasticsearch " || " ${activated_services[*]} " =~ " opensearch " ]]; then
+        volumes_content+="\nvolumes:\n"
+    fi
+
+    # Include Elasticsearch volume if activated
+    if [[ " ${activated_services[*]} " =~ " elasticsearch " ]]; then
+        volumes_content+="  elasticsearch_data:\n"
+    fi
+
+    # Include OpenSearch volume if activated
+    if [[ " ${activated_services[*]} " =~ " opensearch " ]]; then
+        volumes_content+="  opensearch_data:\n"
+    fi
+
+    # Append volumes content to docker-compose content
+    docker_compose_content+="$volumes_content"
+
+    echo -e "$docker_compose_content"
+}
+
+# Function to print usage information
+print_usage() {
+    echo "Usage: dclamp <action> [options]"
+    echo "Actions:"
+    echo "  generate          Generate docker-compose.yml content"
+    echo "    --print/-p       Print to stdout"
+    echo "    --file/-f <filename>    Write to specified file (default: docker-compose.yml)"
+    echo "    --config/-c <filename>   Use specified .env file (default: config.env)"
+    echo "  config            Do nothing (placeholder for future functionality)"
+}
+
+# Default values for options
+print_mode="file"
+filename="docker-compose.yml"
+config_file="dclamp.env"
+
+# Parse command line arguments
+action="$1"
+shift
+
+case "$action" in
+    "generate")
+        while [[ $# -gt 0 ]]; do
+            case "$1" in
+                --print|-p)
+                    print_mode="print"
+                    shift
+                    ;;
+                --file|-f)
+                    print_mode="file"
+                    filename="$2"
+                    shift 2
+                    ;;
+                --config|-c)
+                    config_file="$2"
+                    shift 2
+                    ;;
+                *)
+                    echo "Invalid option: $1"
+                    print_usage
+                    exit 1
+                    ;;
+            esac
+        done
+
+        if [[ "$print_mode" == "print" ]]; then
+            generate_docker_compose
+        elif [[ "$print_mode" == "file" ]]; then
+            generate_docker_compose > "$filename"
+            echo "Generated docker-compose.yml content written to $filename"
+        fi
+        ;;
+    "config")
+        # Placeholder for future functionality
+        echo "Config action placeholder"
+        ;;
+    *)
+        echo "Invalid action: $action"
+        print_usage
+        exit 1
+        ;;
+esac
