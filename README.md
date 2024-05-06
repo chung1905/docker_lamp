@@ -5,20 +5,15 @@ This docker setup has been tested with Magento 2, WordPress and Symfony 2 -> Sym
 ## How to set up:
 1. Install `docker` and `docker compose` properly
 2. Clone project and `cd` into the that
-3. Create configurations files
-- `.env` file
+3. Create configurations files (for the first time):
+- `.env`: define docker env variable
+- `dclamp.env`: define PHP versions and services
+- `docker-compose.yml`: Docker compose file
 ```shell
-echo "UID=$UID" > .env
+./dclamp
 ```
-- `dclamp.env` file (define PHP versions and services)
-```shell
-./dclamp config
-```
-4. Generate `docker-compose.yml`
-```shell
-./dclamp generate
-```
-5. Create and run container:
+- Next time, you have to run `./dclamp config` and `./dclamp generate` separately.
+4. Create and run container:
 ```shell
 docker compose up -d
 ```
