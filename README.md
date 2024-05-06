@@ -9,14 +9,10 @@ This docker setup has been tested with Magento 2, WordPress and Symfony 2 -> Sym
 - `.env` file
 ```shell
 echo "UID=$UID" > .env
-echo "XDEBUG_MODE=debug" >> .env
 ```
 - `dclamp.env` file (define PHP versions and services)
 ```shell
-# Choose what PHP version you want
-echo "PHP_VERSIONS='8.1 7.4'" > dclamp.env
-# For more services, see compose-declaration.yml
-echo "ACTIVATED_SERVICES='httpd mariadb opensearch'" > dclamp.env
+./dclamp config
 ```
 4. Generate `docker-compose.yml`
 ```shell

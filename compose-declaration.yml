@@ -9,7 +9,7 @@ services:
         TIME_ZONE: ${TIME_ZONE:-Asia/Ho_Chi_Minh}
         PHP_VER: 8
     environment:
-      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+      XDEBUG_MODE: ${XDEBUG_MODE:-debug}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -67,5 +67,5 @@ services:
       - "3306:3306"
 
 volumes:
-  esdata:
-  opensearchdata:
+  elasticsearch_data:
+  opensearch_data:

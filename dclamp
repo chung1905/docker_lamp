@@ -82,20 +82,23 @@ print_usage() {
     echo "    --print/-p       Print to stdout"
     echo "    --file/-f <filename>    Write to specified file (default: docker-compose.yml)"
     echo "    --config/-c <filename>   Use specified .env file (default: dclamp.env)"
-    echo "  config            Display brief configuration documentation"
+    echo "  config            Setup configuration"
 }
 
-# Function to display brief configuration documentation
-config_documentation() {
-    echo "Configuration File: dclamp.env"
-    echo "  - Define PHP versions: PHP_VERSIONS='8.1 7.4'"
-    echo "  - Define activated services: ACTIVATED_SERVICES='httpd mariadb opensearch'"
+# Function to display available services
+display_available_services() {
+    echo "Available services:"
+    services_section=$(awk '/^services:$/,/^$/ {print}' compose-declaration.yml)
+    echo "$services_section" | awk '/^[[:space:]]{2}[a-zA-Z0-9_-]+:/ && !/php:/ {gsub(/:/,"",$1); print "  " $1}'
 }
 
 # Default values for options
-print_mode="file"
 filename="docker-compose.yml"
 config_file="dclamp.env"
+
+# Default values for configuration setup
+default_php_versions="7.4 8.1"
+default_activated_services="httpd mariadb opensearch"
 
 # Parse command line arguments
 action="$1"
@@ -103,6 +106,7 @@ shift
 
 case "$action" in
     "generate")
+        print_mode="file"
         while [ $# -gt 0 ]; do
             case "$1" in
                 --print|-p)
@@ -134,7 +138,25 @@ case "$action" in
         fi
         ;;
     "config")
-        config_documentation
+        echo "Configuration Setup:"
+
+        # Prompt for PHP versions with default value
+        read -rp "Define PHP versions (default: $default_php_versions): " php_versions
+        php_versions=${php_versions:-$default_php_versions}
+
+        # Display available services
+        display_available_services
+
+        # Prompt for activated services with default value
+        read -rp "Define activated services (default: $default_activated_services): " activated_services
+        activated_services=${activated_services:-$default_activated_services}
+
+        # Writing configurations to file
+        echo "PHP_VERSIONS='$php_versions'" > "$config_file"
+        echo "ACTIVATED_SERVICES='$activated_services'" >> "$config_file"
+        echo "UID=$UID" > .env
+
+        echo "Configurations written to $config_file and .env"
         ;;
     *)
         echo "Invalid action: $action"
