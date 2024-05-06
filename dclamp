@@ -53,6 +53,7 @@ EOL
     # Include volumes if Elasticsearch or OpenSearch is activated
     if [[ " $ACTIVATED_SERVICES " = *" elasticsearch "* || " $ACTIVATED_SERVICES " = *" opensearch "* ]]; then
         volumes_content="
+
 volumes:"
     fi
 
@@ -83,6 +84,7 @@ print_usage() {
     echo "    --file/-f <filename>    Write to specified file (default: docker-compose.yml)"
     echo "    --config/-c <filename>   Use specified .env file (default: dclamp.env)"
     echo "  config            Setup configuration"
+    echo "  help              Display this usage information"
 }
 
 # Function to display available services
@@ -103,6 +105,18 @@ default_activated_services="httpd mariadb opensearch"
 # Parse command line arguments
 action="$1"
 shift
+
+if [ -z "$action" ]; then
+    if [ ! -f "dclamp.env" ]; then
+        echo "dclamp.env file not found. Running config and generate actions automatically."
+        action="config"
+        generate="yes"
+    else
+        echo "No action provided. Displaying help."
+        print_usage
+        exit 0
+    fi
+fi
 
 case "$action" in
     "generate")
@@ -154,9 +168,24 @@ case "$action" in
         # Writing configurations to file
         echo "PHP_VERSIONS='$php_versions'" > "$config_file"
         echo "ACTIVATED_SERVICES='$activated_services'" >> "$config_file"
-        echo "UID=$UID" > .env
 
-        echo "Configurations written to $config_file and .env"
+        if [ ! -e ".env" ]; then
+            echo "Notice: .env file does not exist. Creating .env file."
+            echo "UID=$UID" > .env
+        fi
+
+        echo "Configurations written to $config_file"
+
+        # Generate docker-compose.yml if flagged
+        if [ "$generate" = "yes" ]; then
+            generate_docker_compose > "docker-compose.yml"
+            echo "Generated docker-compose.yml content written to docker-compose.yml"
+        else
+            echo "To generate docker-compose.yml, run: ./dclamp generate"
+        fi
+        ;;
+    "help")
+        print_usage
         ;;
     *)
         echo "Invalid action: $action"
