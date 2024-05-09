@@ -18,4 +18,5 @@ export_phpstorm_config() {
 
 export_phpstorm_config
 
-php "$@"
+# https://www.jetbrains.com/help/phpstorm/debugging-a-php-cli-script.html#start-the-script-with-debugging-using-php-command-line-switches
+php -dxdebug.mode=debug -dxdebug.start_with_request=yes "$@"
