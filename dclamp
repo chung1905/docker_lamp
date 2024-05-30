@@ -50,24 +50,21 @@ EOL
     # Initialize volumes content
     volumes_content=""
 
-    # Include volumes if Elasticsearch or OpenSearch is activated
-    if [[ " $ACTIVATED_SERVICES " = *" elasticsearch "* || " $ACTIVATED_SERVICES " = *" opensearch "* ]]; then
-        volumes_content="
+    # Define the services that can have volumes
+    services_with_volumes=("elasticsearch" "opensearch" "mailpit")
 
+    # Check if any of the services are activated and include volumes section
+    for service in "${services_with_volumes[@]}"; do
+        if [[ " $ACTIVATED_SERVICES " = *" $service "* ]]; then
+            if [[ -z "$volumes_content" ]]; then
+                volumes_content="
 volumes:"
-    fi
-
-    # Include Elasticsearch volume if activated
-    if [[ " $ACTIVATED_SERVICES " = *" elasticsearch "* ]]; then
-        volumes_content="$volumes_content
-  elasticsearch_data:"
-    fi
-
-    # Include OpenSearch volume if activated
-    if [[ " $ACTIVATED_SERVICES " = *" opensearch "* ]]; then
-        volumes_content="$volumes_content
-  opensearch_data:"
-    fi
+            fi
+            volume_name="${service}_data"
+            volumes_content="$volumes_content
+  $volume_name:"
+        fi
+    done
 
     # Append volumes content to docker-compose content
     docker_compose_content="$docker_compose_content$volumes_content"

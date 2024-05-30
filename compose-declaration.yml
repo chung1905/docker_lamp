@@ -65,7 +65,14 @@ services:
       MYSQL_ROOT_PASSWORD: "1"
     ports:
       - "3306:3306"
+  mailpit:
+    image: axllent/mailpit
+    volumes:
+      - ./data:/data
+    ports:
+      - "8025:8025"
 
 volumes:
   elasticsearch_data:
   opensearch_data:
+  mailpit_data:
