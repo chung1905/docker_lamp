@@ -25,8 +25,8 @@ services:
   elasticsearch:
     image: elasticsearch:7.17.20
     volumes:
-      - './search_engine/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro'
-      - 'elasticsearch_data:/usr/share/elasticsearch/data'
+      - ./search_engine/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - elasticsearch_data:/usr/share/elasticsearch/data
     environment:
       ES_JAVA_OPTS: "-Xmx2g -Xms2g"
   opensearch:
@@ -34,8 +34,8 @@ services:
     environment:
       - discovery.type=single-node
     volumes:
-      - './search_engine/opensearch/config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml:ro'
-      - 'opensearch_data:/usr/share/opensearch/data'
+      - ./search_engine/opensearch/config/opensearch.yml:/usr/share/opensearch/config/opensearch.yml:ro
+      - opensearch_data:/usr/share/opensearch/data
   httpd:
     build:
       context: ./httpd
@@ -68,7 +68,7 @@ services:
   mailpit:
     image: axllent/mailpit
     volumes:
-      - ./data:/data
+      - mailpit_data:/data
     ports:
       - "8025:8025"
 
