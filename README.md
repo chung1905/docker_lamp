@@ -1,5 +1,5 @@
 # LAMP Stack in Docker
-###### PHP5 + PHP7 + Apache2 + MariaDB in Docker
+###### multiple PHP (5.6/7.x/8.x) + Apache2 + MariaDB/Mysql + ... in Docker
 This docker setup has been tested with Magento 2, WordPress and Symfony 2 -> Symfony 4
 
 ## How to set up:
@@ -25,15 +25,15 @@ docker compose up -d
 
 ### Default VirtualHost
 - Default PHP version(s): latest PHP 8.x
-- Assume your `index.php` is located at `./public_html/projectname/public/index.php`,
+- Assume your `index.php` is located at `./public_html/project-dir/public-dir/index.php`,
 please browse to: 
-  - `http://public.project.php73` to run your application with PHP 7.3,
-  - `http://public.project.php74` (PHP 7.4)
-- Tip:
-  - You can use dnsmasq instead of /etc/hosts, example:
+  - `http://public-dir.project-dir73.localhost` to run your application with PHP 7.3,
+  - `http://public-dir.project-dir74.localhost` (PHP 7.4)
+- You don't have to add entry to `/etc/hosts/` because by default, all .localhost sites will be redirected to 127.0.0.1:
+  - If it's not the case, you can use dnsmasq instead of /etc/hosts, example:
 ```
-# Redirect all sites in 4 domains (phpXX) to 127.0.0.1
-address=/php71/php72/php73/php74/127.0.0.1
+# Redirect all localhost sites to 127.0.0.1
+address=/localhost/127.0.0.1
 ```
 
 ### Custom VirtualHost
