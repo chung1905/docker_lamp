@@ -86,3 +86,5 @@ RUN mkdir -p /usr/local/bin \
 COPY ./bin/* /usr/local/bin/
 
 USER ${USER}
+
+RUN git config --global --add safe.directory '*'
