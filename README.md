@@ -13,7 +13,14 @@ This docker setup has been tested with Magento 2, WordPress and Symfony 2 -> Sym
 ./dclamp
 ```
 - Next time, you have to run `./dclamp config` and `./dclamp generate` separately.
-4. Create and run container:
+4. Generate wildcard self-signed certificates for `*.*.localhost` (optional)
+```shell
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+-keyout ./httpd/certs/x.x.localhost.key \
+-out ./httpd/certs/x.x.localhost.crt \
+-subj "/C=XX/ST=State/L=City/O=Company/OU=CompanySectionName/CN=*.*.localhost"
+```
+5. Create and run container:
 ```shell
 docker compose up -d
 ```

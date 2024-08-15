@@ -42,9 +42,11 @@ services:
     volumes:
       - ./httpd/conf:/usr/local/apache2/conf/docker:ro
       - ./httpd/logs:/usr/local/apache2/logs
+      - ./httpd/certs:/usr/local/apache2/certs:ro
       - ./public_html:/var/www/html:ro
     ports:
       - "80:80"
+      - "443:443"
   mysql:
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password
