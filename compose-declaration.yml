@@ -52,6 +52,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     volumes:
       - ./database/volumes/mysql/data:/var/lib/mysql
+      - ./database/backup:/var/dump
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: "1"
@@ -61,6 +62,7 @@ services:
     image: mariadb:10.6
     volumes:
       - ./database/volumes/mariadb/data:/var/lib/mysql
+      - ./database/backup:/var/dump
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: "1"

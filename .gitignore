@@ -4,4 +4,3 @@
 .DS_Store
 /dclamp.env
 /docker-compose.yml
-/database
