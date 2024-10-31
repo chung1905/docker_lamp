@@ -4,7 +4,7 @@ set -e
 PHP_VERSION=$(php -v | head -n 1 | awk '{print $2}' | cut -d. -f1,2)
 
 # Supported Versions and Compatibility: https://xdebug.org/docs/compat
-# Xdebug Version Release: https://xdebug.org/docs/all#version-compatibility
+# Xdebug Version Release: https://xdebug.org/download/historical
 case $PHP_VERSION in
     "8.0") XDEBUG_VERSION="3.3.2";;  # May have version 3.3.3 in future
     "7.4"|"7.3"|"7.2") XDEBUG_VERSION="3.1.6";;

@@ -1,4 +1,4 @@
-ARG PHP_VER
+ARG PHP_VER=latest
 ARG PHP_IMG=php:${PHP_VER}-fpm
 
 FROM ${PHP_IMG}
@@ -28,6 +28,7 @@ RUN apt-get -y update \
         bash-completion \
         git \
         unzip \
+        libpq-dev \
     && apt-get autoremove -y \
     && apt-get autoclean -y \
     && rm -rf /var/lib/apt/lists/*
